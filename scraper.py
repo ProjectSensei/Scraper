@@ -25,8 +25,8 @@ with open('page.txt', 'r') as f:
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0'}
 while page_num < 55:
     page_num = page_num + 1
-    print('[i] Sending request to https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num))) # send the url it will send the request
-    page = requests.get('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)), headers=headers) # sends a get request to get html
+    print('[i] Sending request to https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)))
+    page = requests.get('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)), headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     listingresults = soup.find('ul', class_='listing')
     results = listingresults.findChildren('a', href=True)
