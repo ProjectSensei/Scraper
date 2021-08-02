@@ -1,12 +1,16 @@
+import os
+from dotenv import load_dotenv
 import mysql.connector
 from mysql.connector import cursor
 
+load_dotenv()
+
 anime_db = mysql.connector.connect(
-    host = "remotemysql.com",
-    user = "1BT0P36KhA",
-    password = "Wwng1zQpuK",
-    database = "1BT0P36KhA",
-    port = "3306"
+    host = os.getenv("HOST"),
+    user = os.getenv("USER"),
+    password = os.getenv("PASSWORD"),
+    database = os.getenv("DATABASE"),
+    port = os.getenv("PORT")
 )
 
 db_cursor = anime_db.cursor()
@@ -22,5 +26,3 @@ def insert_anime(name, episodes):
 def truncate_table():
     sql = "TRUNCATE anime_database"
     db_cursor.execute(sql)
-
-truncate_table()
