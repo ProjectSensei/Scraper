@@ -1,6 +1,6 @@
 # Scraper
 
-### Dataabse Updater
+## Database Updater
 The script `updater.py` in ./database_updater is responsible for pushing all the data inside `anime_data.json` to the MySQL anime_database table.
 
 | Command | Description |
