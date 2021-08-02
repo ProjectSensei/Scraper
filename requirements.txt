@@ -1,0 +1,7 @@
+python-dotenv
+mysql-connector-python
+json
+re
+beautifulsoup4
+requests
+time
