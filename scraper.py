@@ -7,6 +7,12 @@ from urllib.parse import unquote
 directlinks = []
 brokenlinks = []
 animes = {}
+proxies = {}
+if input('[?] Do you want to use a proxy? (Y/N): ').upper() == 'Y':
+    print('[i] Use a socks4 proxy')
+    a = input('[?] Enter ip:port: ')
+    proxies['https'] = 'socks4://'+a
+    proxies['http'] = 'socks4://'+a
 titlecheck = ''
 def createkey(key, value):
     animes[key] = value
@@ -22,11 +28,15 @@ except KeyError:
     pass
 with open('page.txt', 'r') as f:
     page_num = int(f.read())
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0'}
+headers = {'User-Agent': 'Nokia7610/2.0 (5.0509.0) SymbianOS/7.0s Series60/2.1 Profile/MIDP-2.0 Configuration/CLDC-1.0'}
 while page_num < 55:
     page_num = page_num + 1
-    print('[i] Sending request to https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)))
-    page = requests.get('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)), headers=headers)
+    if proxies == {}:
+        print('[i] Sending request to https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)))
+        page = requests.get('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)), headers=headers)
+    else:
+        print('[i] Sending request to https://kissanime.rest/all_anime/?page={}&alphabet=all using proxy {}'.format(str(page_num),proxies['https']))
+        page = requests.get('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)), headers=headers, proxies=proxies)
     soup = BeautifulSoup(page.content, 'html.parser')
     listingresults = soup.find('ul', class_='listing')
     results = listingresults.findChildren('a', href=True)
@@ -37,8 +47,12 @@ while page_num < 55:
         if result['href'].startswith('/anime/'):
             links.append('https://kissanime.rest'+result['href'])
     for link in links:
-        print('[i] Sending request to {}'.format(link))
-        page = requests.get(link, headers=headers)
+        if proxies == {}:
+            print('[i] Sending request to {}'.format(link))
+            page = requests.get(link, headers=headers)
+        else:
+            print('[i] Sending request to {} using proxy {}'.format(link, proxies['https']))
+            page = requests.get(link, headers=headers, proxies=proxies)
         soup = BeautifulSoup(page.content, 'html.parser')
         eplinksli = soup.find('ul', id='episode_related')
         eplinks = eplinksli.findChildren('a', href=True,class_='')
@@ -58,8 +72,12 @@ while page_num < 55:
     links2 = list(dict.fromkeys(links2))
     for link in links2:
         emptylistcheck = True
-        print('[i] Sending request to {}'.format(link))
-        page = requests.get(link, headers=headers)
+        if proxies == {}:
+            print('[i] Sending request to {}'.format(link))
+            page = requests.get(link, headers=headers)
+        else:
+            print('[i] Sending request to {} using proxy {}'.format(link,proxies['https']))
+            page = requests.get(link, headers=headers, proxies=proxies)
         soup = BeautifulSoup(page.content, 'html.parser')
         results = soup.find_all('a', {'class':'active'})
         try:
