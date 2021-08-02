@@ -3,5 +3,5 @@ mysql-connector-python
 json
 re
 beautifulsoup4
-requests
+requests[socks]
 time
