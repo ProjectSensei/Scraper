@@ -28,7 +28,7 @@ except KeyError:
     pass
 with open('page.txt', 'r') as f:
     page_num = int(f.read())
-headers = {'User-Agent': 'Nokia7610/2.0 (5.0509.0) SymbianOS/7.0s Series60/2.1 Profile/MIDP-2.0 Configuration/CLDC-1.0'}
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'}
 while page_num < 55:
     page_num = page_num + 1
     if proxies == {}:
