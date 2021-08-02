@@ -5,7 +5,7 @@ import json
 # RegEx patterns
 def convert(a):
     pattern_for_title_and_episode = re.compile(r"^[^;]*?&title=|\W*&.*$")
-    pattern_for_title = re.compile(r"^[^;]*?&title=|(?=\+episode).*$")
+    pattern_for_title = re.compile(r"(?i)^[^;]*?&title=|(?=\+episode).*$")
     pattern_for_episode = re.compile(r"^[^;]*?&title=|.+?(?=episode)|(?<=\+episode\+\d).*$", re.IGNORECASE)
 
 # Target link (must be dynamic)
