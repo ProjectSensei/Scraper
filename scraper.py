@@ -104,7 +104,7 @@ while page_num < 55:
                     directlinks.append('https:' + results[0]['data-video'])
                     animes[anime_title_from_link] = directlinks
                 else:
-                    print('[i] Appending video link - ' + 'httpsdude://' + results[0]['data-video'])
+                    print('[i] Appending video link - ' + 'https://' + results[0]['data-video'])
                     directlinks.append('https://' + results[0]['data-video'])
                     animes[anime_title_from_link] = directlinks
             except IndexError:
