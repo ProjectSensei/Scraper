@@ -14,11 +14,6 @@ if input('[?] Do you want to use a proxy? (Y/N): ').upper() == 'Y':
     proxies['https'] = 'socks4://'+a
     proxies['http'] = 'socks4://'+a
 titlecheck = ''
-def createkey(key, value):
-    animes[key] = value
-def StringFinalizer(animelink): 
-        str1 = " "
-        return (str1.join(animelink))
 try:
     with open('links.json', 'r') as f:
         file = f.read()
