@@ -7,6 +7,7 @@ from urllib.parse import unquote
 directlinks = []
 brokenlinks = []
 animes = {}
+global proxies
 proxies = {}
 if input('[?] Do you want to use a proxy? (Y/N): ').upper() == 'Y':
     print('[i] Use a socks4 proxy')
@@ -24,6 +25,25 @@ except KeyError:
 with open('page.txt', 'r') as f:
     page_num = int(f.read())
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'}
+def proxygetrequest(link):
+    proxyfails = 0
+    global proxies
+    while True:
+        if proxyfails <= 75:
+            try:
+                return(requests.get(link, headers=headers, proxies=proxies))
+                break
+            except:
+                print('[!] Proxy error, retrying')
+                time.sleep(1)
+                proxyfails = proxyfails + 1
+        else:
+            print('[!] Proxy failed {} times'.format(str(proxyfails)))
+            print('[i] Use a socks4 proxy')
+            a = input('[?] Enter ip:port: ')
+            proxies['https'] = 'socks4://'+a
+            proxies['http'] = 'socks4://'+a
+            proxyfails = 0
 while page_num < 55:
     page_num = page_num + 1
     if proxies == {}:
@@ -31,7 +51,7 @@ while page_num < 55:
         page = requests.get('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)), headers=headers)
     else:
         print('[i] Sending request to https://kissanime.rest/all_anime/?page={}&alphabet=all using proxy {}'.format(str(page_num),proxies['https']))
-        page = requests.get('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)), headers=headers, proxies=proxies)
+        page = proxygetrequest('https://kissanime.rest/all_anime/?page={}&alphabet=all'.format(str(page_num)))
     soup = BeautifulSoup(page.content, 'html.parser')
     listingresults = soup.find('ul', class_='listing')
     results = listingresults.findChildren('a', href=True)
@@ -47,7 +67,7 @@ while page_num < 55:
             page = requests.get(link, headers=headers)
         else:
             print('[i] Sending request to {} using proxy {}'.format(link, proxies['https']))
-            page = requests.get(link, headers=headers, proxies=proxies)
+            page = proxygetrequest(link)
         soup = BeautifulSoup(page.content, 'html.parser')
         eplinksli = soup.find('ul', id='episode_related')
         eplinks = eplinksli.findChildren('a', href=True,class_='')
@@ -72,7 +92,7 @@ while page_num < 55:
             page = requests.get(link, headers=headers)
         else:
             print('[i] Sending request to {} using proxy {}'.format(link,proxies['https']))
-            page = requests.get(link, headers=headers, proxies=proxies)
+            page = proxygetrequest(link)
         soup = BeautifulSoup(page.content, 'html.parser')
         results = soup.find_all('a', {'class':'active'})
         try:
